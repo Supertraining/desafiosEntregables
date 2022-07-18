@@ -60,7 +60,7 @@ header nav .menuFly {
   animation-name: menuFly;
   animation-duration: 3s;
   box-shadow: -4px 4px 0px #bc2a8d;
-  width: 520px;
+  width: 400px;
 }
 @keyframes menuFly {
   from {
@@ -107,6 +107,10 @@ header .imgEncabezado h1 {
     font-size: 8em;
     transition: 3s;
   }
+}
+
+.miCarritoPointer {
+  cursor: pointer;
 }
 
 footer {
