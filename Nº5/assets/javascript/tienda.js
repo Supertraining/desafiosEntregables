@@ -1,20 +1,58 @@
-let inputEdad = document.getElementById(`input-edad`);
-let btnInputEdad = document.getElementById(`btn-inputedad`);
-let formEdad = document.getElementById(`bienvenido`);
-
 let busquedaNombreTipo = document.getElementById(`buscador-texto`);
 let busquedaValorMaximo = document.getElementById(`buscador-precioMax`);
 let busquedaValorMinimo = document.getElementById(`buscador-precioMin`);
 let btnBusqueda = document.getElementById(`btn-busqueda`);
 let btnNuevaBusqueda = document.getElementById("btn-nuevaBusqueda");
 
-formEdad.onsubmit = (e) => {
-  e.preventDefault();
-  let edadEntrada = inputEdad.value;
-  inputEdad.setAttribute("disabled", "");
-  btnInputEdad.setAttribute("disabled", "");
+const edadEntrada = JSON.parse(localStorage.getItem("edadUsuario"));
 
-  const Toast = Swal.mixin({
+// (async () => {
+// const { value: accept } = await Swal.fire({
+//   title: 'Debes ser mayor de edad para acceder a la tienda',
+//   input: 'checkbox',
+//   inputValue: 1,
+//   inputPlaceholder:
+//     'Declaro que soy mayor de edad',
+//   confirmButtonText:
+//     'Continue <i class="fa fa-arrow-right"></i>',
+//   inputValidator: (result) => {
+//     return !result && 'debes confirmar que eres mayor de edad para porder acceder'
+//   }
+// })
+
+// if (accept) {
+//   Swal.fire('Bienvenido a nuestra tienda :)')
+// }
+// })()
+
+ function entrada (edadUsuario) {
+    
+  
+  if (!edadUsuario) {
+    document.querySelector(`#contenedor-formulario`).innerHTML = `
+    <form class="d-flex flex-column col-xl-2 text-center border rounded p-3" id="bienvenido">
+    <p class="fw-bolder my-1">Ingrese su edad por favor</p>
+    <input type="number" id="input-edad" placeholder="Ingrese su edad" class = "my-1 text-center">
+    <input type="submit" id="btn-inputedad" value="Acceso a la tienda" class="bg-black text-white">
+    </form>`;
+    const formEdad = document.getElementById(`bienvenido`);
+    formEdad.onsubmit = (e) => {
+    let edadUsuario = document.getElementById(`input-edad`).value;
+     localStorage.setItem("edadUsuario", JSON.stringify(edadUsuario));
+     if (edadUsuario < 18 && edadUsuario >0) {
+      e.preventDefault()
+      let inputEdad = document.getElementById("input-edad")
+      let btnInputEdad = document.getElementById("input-edad")
+      inputEdad.setAttribute("disabled", "");
+      btnInputEdad.setAttribute("disabled", "");
+      Swal.fire({title: "Eres menor de edad", text: "Lo siento no puedes aceder", icon: "error"})
+       return localStorage.clear()
+      }
+    }}
+
+  
+  else if (edadUsuario > 18) {
+    const Toast = Swal.mixin({
     toast: true,
     position: 'center',
     showConfirmButton: false,
@@ -28,12 +66,15 @@ formEdad.onsubmit = (e) => {
       toast.addEventListener('mouseleave', Swal.resumeTimer)
     }
   })
-  
   Toast.fire({
     icon: 'success',
-    title: 'ienvenido a nuestra tienda!'
+    title: 'Bienvenido a nuestra tienda!'
   })
-}
+   
+
+ 
+    
+
   busquedaNombreTipo.removeAttribute("disabled", "");
   busquedaValorMaximo.removeAttribute("disabled", "");
   busquedaValorMinimo.removeAttribute("disabled", "");
@@ -133,12 +174,12 @@ formEdad.onsubmit = (e) => {
       for (const p of resultadoBusquedaNombre) {
         let productoBuscado = document.createElement(`ul`);
         productoBuscado.setAttribute(`class`, `w-auto border p-2 m-2 rounded list-unstyled`);
-        caract = `<li>NOMBRE: ${p.nombre}</li> 
-            <li>BODEGA: ${p.bodega}</li> 
-            <li>TIPO: ${p.tipo}</li> 
-            <li>OJOS: ${p.color}</li> 
-            <li>NARIZ: ${p.aroma}</li> 
-            <li>BOCA: ${p.sabor}</li> 
+        caract = `<li>NOMBRE: ${p.nombre}</li>
+            <li>BODEGA: ${p.bodega}</li>
+            <li>TIPO: ${p.tipo}</li>
+            <li>OJOS: ${p.color}</li>
+            <li>NARIZ: ${p.aroma}</li>
+            <li>BOCA: ${p.sabor}</li>
             <li>VALOR: $${p.valor}</li>`;
 
         productoBuscado.innerHTML = caract;
@@ -157,11 +198,11 @@ formEdad.onsubmit = (e) => {
         productoBuscado = document.createElement(`ul`);
         productoBuscado.setAttribute(`class`, `w-auto border p-2 m-2 rounded list-unstyled shadow`);
         caract = `<li>NOMBRE: ${p.nombre}</li>
-            <li>BODEGA: ${p.bodega}</li> 
-            <li>TIPO: ${p.tipo}</li> 
-            <li>OJOS: ${p.color}</li> 
-            <li>NARIZ: ${p.aroma}</li> 
-            <li>BOCA: ${p.sabor}</li> 
+            <li>BODEGA: ${p.bodega}</li>
+            <li>TIPO: ${p.tipo}</li>
+            <li>OJOS: ${p.color}</li>
+            <li>NARIZ: ${p.aroma}</li>
+            <li>BOCA: ${p.sabor}</li>
             <li>VALOR: $${p.valor}</li>`;
 
         productoBuscado.innerHTML = caract;
@@ -189,11 +230,11 @@ formEdad.onsubmit = (e) => {
         productoBuscado = document.createElement(`ul`);
         productoBuscado.setAttribute(`class`, `w-auto border p-2 m-2 rounded list-unstyled shadow`);
         caract = `<li>NOMBRE: ${p.nombre}</li>
-            <li>BODEGA: ${p.bodega}</li> 
-            <li>TIPO: ${p.tipo}</li> 
-            <li>OJOS: ${p.color}</li> 
-            <li>NARIZ: ${p.aroma}</li> 
-            <li>BOCA: ${p.sabor}</li> 
+            <li>BODEGA: ${p.bodega}</li>
+            <li>TIPO: ${p.tipo}</li>
+            <li>OJOS: ${p.color}</li>
+            <li>NARIZ: ${p.aroma}</li>
+            <li>BOCA: ${p.sabor}</li>
             <li>VALOR: $${p.valor}</li>`;
         productoBuscado.innerHTML = caract;
         ProdEncontrados.appendChild(productoBuscado);
@@ -215,12 +256,12 @@ formEdad.onsubmit = (e) => {
     let contenedor = document.createElement(`ul`);
     contenedor.setAttribute("class", "list-group list-group-flush");
     contenedor.setAttribute("id", "elemento-creado");
-    contenedor.innerHTML = `<li class="list-group-item">NOMBRE: ${prod.nombre}</li> 
+    contenedor.innerHTML = `<li class="list-group-item">NOMBRE: ${prod.nombre}</li>
                               <li class="list-group-item">BODEGA: ${prod.bodega}</li>
-                              <li class="list-group-item">TIPO: ${prod.tipo}</li> 
-                              <li class="list-group-item">OJOS: ${prod.color}</li> 
-                              <li class="list-group-item">NARIZ: ${prod.aroma}</li> 
-                              <li class="list-group-item">BOCA: ${prod.sabor}</li> 
+                              <li class="list-group-item">TIPO: ${prod.tipo}</li>
+                              <li class="list-group-item">OJOS: ${prod.color}</li>
+                              <li class="list-group-item">NARIZ: ${prod.aroma}</li>
+                              <li class="list-group-item">BOCA: ${prod.sabor}</li>
                               <li class="list-group-item">VALOR: $${prod.valor}</li>`;
     let elemento = document.getElementById(el);
     elemento.appendChild(contenedor);
@@ -264,10 +305,10 @@ formEdad.onsubmit = (e) => {
     arr.push(prod.cantidad);
   }
 
-  class toast { 
+  class toast {
     constructor (text, duration, gravity, position, className) {
       this.text = text,
-      this.duration = duration, 
+      this.duration = duration,
       this.gravity = gravity,
       this.position = position,
       this.className = className
@@ -284,8 +325,8 @@ formEdad.onsubmit = (e) => {
       toasty
     ).showToast();
   };
-   
-   
+
+
   let btnCarritoVermouth = document.getElementById("agregar-carrito-vermouth");
   btnCarritoVermouth.onclick = () => {
     agregarCarrito(productos[1], carritoV);
@@ -320,7 +361,7 @@ formEdad.onsubmit = (e) => {
     let carritoVermouth = JSON.parse(localStorage.getItem("vermouth", carritoV));
     let carritoBonarda = JSON.parse(localStorage.getItem("bonarda", carritoB));
     let carritoViognier = JSON.parse(localStorage.getItem("viognier", carritoVg));
-   
+
     let divCarritoSyrah = document.getElementById("carrito-syrah");
     let divCarritoVermouth = document.getElementById("carrito-vermouth");
     let divCarritoBonarda = document.getElementById("carrito-bonarda");
@@ -348,44 +389,44 @@ formEdad.onsubmit = (e) => {
     function carritoIndividual(div, arr, elId) {
       for (const obj in arr){
 
-       
 
-        if(elId === `syrah`) { 
-          return (valorSubTotalSyrah = ((productos[0].valor*arr.length)*1.21)) + 
+
+        if(elId === `syrah`) {
+          return (valorSubTotalSyrah = ((productos[0].valor*arr.length)*1.21)) +
           (div.innerHTML = `<p> PRODUCTO: ${productos[0].nombre}
           TIPO: ${productos[0].tipo}
           VALOR: $ ${productos[0].valor} + $ ${productos[0].valor*0.21}
-          CANTIDAD: ${arr.length} 
+          CANTIDAD: ${arr.length}
           SUB-TOTAL: $ ${valorSubTotalSyrah}</p>`) +
-          (borrarCarrito (divCarritoSyrah, `syrah`, carritoS)); 
+          (borrarCarrito (divCarritoSyrah, `syrah`, carritoS));
         } else if (elId === `vermouth`) {
-          return (valorSubTotalVermouth = ((productos[1].valor*arr.length)*1.21)) + 
+          return (valorSubTotalVermouth = ((productos[1].valor*arr.length)*1.21)) +
           (div.innerHTML = `<p> PRODUCTO: ${productos[1].nombre}
           TIPO: ${productos[1].tipo}
           VALOR: $ ${productos[1].valor} + $ ${productos[1].valor*0.21}
-          CANTIDAD: ${arr.length} 
+          CANTIDAD: ${arr.length}
           SUB-TOTAL: $ ${valorSubTotalVermouth}</p>`) +
           (borrarCarrito (divCarritoVermouth, `vermouth`, carritoV));
         } else if (elId === `bonarda`) {
-          return (valorSubTotalBonarda = ((productos[2].valor*arr.length)*1.21)) + 
+          return (valorSubTotalBonarda = ((productos[2].valor*arr.length)*1.21)) +
           (div.innerHTML = `<p> PRODUCTO: ${productos[2].nombre}
           TIPO: ${productos[2].tipo}
           VALOR: $ ${productos[2].valor} + $ ${productos[2].valor*0.21}
-          CANTIDAD: ${arr.length} 
-          SUB-TOTAL: $ ${valorSubTotalBonarda}</p>`) + 
+          CANTIDAD: ${arr.length}
+          SUB-TOTAL: $ ${valorSubTotalBonarda}</p>`) +
           (borrarCarrito (divCarritoBonarda, `bonarda`, carritoB));
         } else if (elId === `viognier`) {
-          return (valorSubTotalViognier = ((productos[3].valor*arr.length)*1.21)) + 
+          return (valorSubTotalViognier = ((productos[3].valor*arr.length)*1.21)) +
           (div.innerHTML = `<p> PRODUCTO: ${productos[3].nombre}
           TIPO: ${productos[3].tipo}
           VALOR: $ ${productos[3].valor} + $ ${productos[3].valor*0.21}
-          CANTIDAD: ${arr.length} 
-          SUB-TOTAL: $ ${valorSubTotalViognier}</p>`) + 
+          CANTIDAD: ${arr.length}
+          SUB-TOTAL: $ ${valorSubTotalViognier}</p>`) +
           (borrarCarrito (divCarritoViognier, `viognier`, carritoVg));
         }
       }
     }
-       
+
     if (carritoSyrah || carritoBonarda || carritoVermouth || carritoViognier) {
         carritoIndividual(divCarritoSyrah, carritoSyrah, `syrah`);
         carritoIndividual(divCarritoVermouth, carritoVermouth, `vermouth`);
@@ -398,7 +439,66 @@ formEdad.onsubmit = (e) => {
       } else {
       divCarritoTotal.innerHTML = "";
     }
-  };
+  }
+  let seccionTragos = document.getElementById(`tragos`)
 
+
+fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=wine`)
+.then(response => response.json())
+  .then( (data) => { 
+    const arr = data.drinks
+    console.log(arr) 
+    const drinkDiv = document.createElement(`div`)
+    drinkDiv.setAttribute(`class`, `col-xl-3 border rounded p-3`)
+    drinkDiv.innerHTML =   `<h4>${arr[0].strDrink}</h4>
+                      <img src="./assets/img/cardBonarda.jpg">
+                      <h5>${arr[0].strCategory}</h5>
+                      <ul><em>Ingredientes:</em>
+                      <li>${arr[0].strIngredient1} ${arr[0].strMeasure1}</li>
+                      <li>${arr[0].strIngredient2} ${arr[0].strMeasure2}</li>
+                      <li>${arr[0].strIngredient3} ${arr[0].strMeasure3}</li>
+                      <li>${arr[0].strIngredient4} ${arr[0].strMeasure4}</li>
+                      <li>${arr[0].strIngredient5} ${arr[0].strMeasure5}</li>
+                      </ul>
+                      <strong>Preparación:</strong>${arr[0].strInstructions}`
+    seccionTragos.appendChild(drinkDiv)
+    const drinkDiv2 = document.createElement(`div`)
+    drinkDiv2.setAttribute(`class`, `col-xl-3 border rounded p-3`)
+    drinkDiv2.innerHTML =   `<h4>${arr[5].strDrink}</h4>
+                      <img src="./assets/img/cardViognier.jpg">
+                      <h5>${arr[5].strCategory}</h5>
+                      <ul><em>Ingredientes:</em>
+                      <li>${arr[5].strIngredient1} ${arr[5].strMeasure1}</li>
+                      <li>${arr[5].strIngredient2} ${arr[5].strMeasure2}</li>
+                      <li>${arr[5].strIngredient3} ${arr[5].strMeasure3}</li>
+                      <li>${arr[5].strIngredient4} ${arr[5].strMeasure4}</li>
+                      <li>${arr[5].strIngredient5} ${arr[5].strMeasure5}</li>
+                      <li>${arr[5].strIngredient6} ${arr[5].strMeasure6}</li>
+                      <li>${arr[5].strIngredient7} ${arr[5].strMeasure7}</li>
+                      </ul>
+                      <strong>Preparación:</strong>${arr[5].strInstructions}`
+  seccionTragos.appendChild(drinkDiv2)
+  })
+  fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=vermouth`)
+  .then(response => response.json())
+    .then( (data) => { 
+      const arr = data.drinks
+      console.log(arr) 
+      const drinkDiv3 = document.createElement(`div`)
+      drinkDiv3.setAttribute(`class`, `col-xl-3 border rounded p-3`)
+      drinkDiv3.innerHTML =   `<h4>${arr[0].strDrink}</h4>
+                        <img src="./assets/img/cardVermouth.jpg">
+                        <h5>${arr[0].strCategory}</h5>
+                        <ul><em>Ingredientes:</em>
+                        <li>${arr[0].strIngredient1} ${arr[0].strMeasure1}</li>
+                        <li>${arr[0].strIngredient2} ${arr[0].strMeasure2}</li>
+                        <li>${arr[0].strIngredient3} ${arr[0].strMeasure3}</li>
+                        </ul>
+                        <strong>Preparación:</strong>${arr[0].strInstructions}`
+      seccionTragos.appendChild(drinkDiv3)
+    })
+}
+return localStorage.clear()}
+entrada(edadEntrada)
 
 

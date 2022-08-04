@@ -1,6 +1,38 @@
-let inputEdad = document.getElementById(`input-edad`);
-let btnInputEdad = document.getElementById(`btn-inputedad`);
-let formEdad = document.getElementById(`bienvenido`);
+const baseDeDatos = {
+  userName: 'ivan',
+  password: '123'
+}
+const session = JSON.parse(localStorage.getItem('session'))
+if (session) {
+
+  document.querySelector("#container").innerHTML = `<h1>Bienvenido ${session.userName}</h1>`
+} else {
+  document.getElementById('container').innerHTML = `
+          <form >
+              <label>Nombre de usuario</label>
+              <input id="userName" type="text">
+              <label>constraseña</label>
+              <input id="password" type="password">
+              <input type="submit">
+          </form>`
+  const form = document.querySelector('form');
+  form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      let userName = document.querySelector("#userName").value
+      let password = document.querySelector("#password").value
+      if (userName != baseDeDatos.userName || password != baseDeDatos.password)
+          return alert("credenciales incorrectas!")
+      alert("Bienvenido")
+      document.querySelector("#container").innerHTML = `<h1>Bienvenido ${userName}</h1>`
+      localStorage.setItem("session", JSON.stringify({ userName, password }))
+  })
+}
+
+
+
+
+
+
 
 let busquedaNombreTipo = document.getElementById(`buscador-texto`);
 let busquedaValorMaximo = document.getElementById(`buscador-precioMax`);
@@ -8,11 +40,34 @@ let busquedaValorMinimo = document.getElementById(`buscador-precioMin`);
 let btnBusqueda = document.getElementById(`btn-busqueda`);
 let btnNuevaBusqueda = document.getElementById("btn-nuevaBusqueda");
 
-formEdad.onsubmit = (e) => {
-  e.preventDefault();
-  let edadEntrada = inputEdad.value;
-  inputEdad.setAttribute("disabled", "");
-  btnInputEdad.setAttribute("disabled", "");
+const edadEntrada = JSON.parse(localStorage.getItem("edadUsuario"));
+
+if (!edadEntrada) {
+  document.querySelector(`#contenedor-formulario`).innerHTML = `
+  <form class="d-flex flex-column col-xl-2 text-center border rounded p-3" id="bienvenido">
+  <p class="fw-bolder my-1">Ingrese su edad por favor</p>
+  <input type="number" id="input-edad" placeholder="Ingrese su edad" class = "my-1 text-center">
+  <input type="submit" id="btn-inputedad" value="Acceso a la tienda" class="bg-black text-white">
+  </form>`;}
+    
+
+
+else if (edadEntrada) {
+const formEdad = document.getElementById(`bienvenido`);
+formEdad.onsubmit = () => {
+ 
+  let edadUsuario = document.getElementById(`input-edad`).value;
+  localStorage.setItem("edadUsuario", JSON.stringify(edadUsuario));
+}}
+
+function entrada (edad) {
+  if (edad < 18) {
+    return swal.fire({ title: `Eres menor de edad.No puedes entrar.`, button: `Entrar`, icon: `error` });
+  }
+}
+entrada(edadEntrada)
+ 
+
 
   const Toast = Swal.mixin({
     toast: true,
@@ -22,18 +77,14 @@ formEdad.onsubmit = (e) => {
     timerProgressBar: true,
     background: 'rgba(0, 0, 0)',
     color: '#bc2a8d',
-    padding: '30px',
-    didOpen: (toast) => {
-      toast.addEventListener('mouseenter', Swal.stopTimer)
-      toast.addEventListener('mouseleave', Swal.resumeTimer)
-    }
+    padding: '30px'
   })
-  
   Toast.fire({
     icon: 'success',
-    title: 'ienvenido a nuestra tienda!'
-  })
-}
+    title: 'Bienvenido a nuestra tienda!'
+  });
+
+ 
   busquedaNombreTipo.removeAttribute("disabled", "");
   busquedaValorMaximo.removeAttribute("disabled", "");
   busquedaValorMinimo.removeAttribute("disabled", "");
@@ -133,12 +184,12 @@ formEdad.onsubmit = (e) => {
       for (const p of resultadoBusquedaNombre) {
         let productoBuscado = document.createElement(`ul`);
         productoBuscado.setAttribute(`class`, `w-auto border p-2 m-2 rounded list-unstyled`);
-        caract = `<li>NOMBRE: ${p.nombre}</li> 
-            <li>BODEGA: ${p.bodega}</li> 
-            <li>TIPO: ${p.tipo}</li> 
-            <li>OJOS: ${p.color}</li> 
-            <li>NARIZ: ${p.aroma}</li> 
-            <li>BOCA: ${p.sabor}</li> 
+        caract = `<li>NOMBRE: ${p.nombre}</li>
+            <li>BODEGA: ${p.bodega}</li>
+            <li>TIPO: ${p.tipo}</li>
+            <li>OJOS: ${p.color}</li>
+            <li>NARIZ: ${p.aroma}</li>
+            <li>BOCA: ${p.sabor}</li>
             <li>VALOR: $${p.valor}</li>`;
 
         productoBuscado.innerHTML = caract;
@@ -157,11 +208,11 @@ formEdad.onsubmit = (e) => {
         productoBuscado = document.createElement(`ul`);
         productoBuscado.setAttribute(`class`, `w-auto border p-2 m-2 rounded list-unstyled shadow`);
         caract = `<li>NOMBRE: ${p.nombre}</li>
-            <li>BODEGA: ${p.bodega}</li> 
-            <li>TIPO: ${p.tipo}</li> 
-            <li>OJOS: ${p.color}</li> 
-            <li>NARIZ: ${p.aroma}</li> 
-            <li>BOCA: ${p.sabor}</li> 
+            <li>BODEGA: ${p.bodega}</li>
+            <li>TIPO: ${p.tipo}</li>
+            <li>OJOS: ${p.color}</li>
+            <li>NARIZ: ${p.aroma}</li>
+            <li>BOCA: ${p.sabor}</li>
             <li>VALOR: $${p.valor}</li>`;
 
         productoBuscado.innerHTML = caract;
@@ -189,11 +240,11 @@ formEdad.onsubmit = (e) => {
         productoBuscado = document.createElement(`ul`);
         productoBuscado.setAttribute(`class`, `w-auto border p-2 m-2 rounded list-unstyled shadow`);
         caract = `<li>NOMBRE: ${p.nombre}</li>
-            <li>BODEGA: ${p.bodega}</li> 
-            <li>TIPO: ${p.tipo}</li> 
-            <li>OJOS: ${p.color}</li> 
-            <li>NARIZ: ${p.aroma}</li> 
-            <li>BOCA: ${p.sabor}</li> 
+            <li>BODEGA: ${p.bodega}</li>
+            <li>TIPO: ${p.tipo}</li>
+            <li>OJOS: ${p.color}</li>
+            <li>NARIZ: ${p.aroma}</li>
+            <li>BOCA: ${p.sabor}</li>
             <li>VALOR: $${p.valor}</li>`;
         productoBuscado.innerHTML = caract;
         ProdEncontrados.appendChild(productoBuscado);
@@ -215,12 +266,12 @@ formEdad.onsubmit = (e) => {
     let contenedor = document.createElement(`ul`);
     contenedor.setAttribute("class", "list-group list-group-flush");
     contenedor.setAttribute("id", "elemento-creado");
-    contenedor.innerHTML = `<li class="list-group-item">NOMBRE: ${prod.nombre}</li> 
+    contenedor.innerHTML = `<li class="list-group-item">NOMBRE: ${prod.nombre}</li>
                               <li class="list-group-item">BODEGA: ${prod.bodega}</li>
-                              <li class="list-group-item">TIPO: ${prod.tipo}</li> 
-                              <li class="list-group-item">OJOS: ${prod.color}</li> 
-                              <li class="list-group-item">NARIZ: ${prod.aroma}</li> 
-                              <li class="list-group-item">BOCA: ${prod.sabor}</li> 
+                              <li class="list-group-item">TIPO: ${prod.tipo}</li>
+                              <li class="list-group-item">OJOS: ${prod.color}</li>
+                              <li class="list-group-item">NARIZ: ${prod.aroma}</li>
+                              <li class="list-group-item">BOCA: ${prod.sabor}</li>
                               <li class="list-group-item">VALOR: $${prod.valor}</li>`;
     let elemento = document.getElementById(el);
     elemento.appendChild(contenedor);
@@ -264,10 +315,10 @@ formEdad.onsubmit = (e) => {
     arr.push(prod.cantidad);
   }
 
-  class toast { 
+  class toast {
     constructor (text, duration, gravity, position, className) {
       this.text = text,
-      this.duration = duration, 
+      this.duration = duration,
       this.gravity = gravity,
       this.position = position,
       this.className = className
@@ -284,8 +335,8 @@ formEdad.onsubmit = (e) => {
       toasty
     ).showToast();
   };
-   
-   
+
+
   let btnCarritoVermouth = document.getElementById("agregar-carrito-vermouth");
   btnCarritoVermouth.onclick = () => {
     agregarCarrito(productos[1], carritoV);
@@ -320,7 +371,7 @@ formEdad.onsubmit = (e) => {
     let carritoVermouth = JSON.parse(localStorage.getItem("vermouth", carritoV));
     let carritoBonarda = JSON.parse(localStorage.getItem("bonarda", carritoB));
     let carritoViognier = JSON.parse(localStorage.getItem("viognier", carritoVg));
-   
+
     let divCarritoSyrah = document.getElementById("carrito-syrah");
     let divCarritoVermouth = document.getElementById("carrito-vermouth");
     let divCarritoBonarda = document.getElementById("carrito-bonarda");
@@ -348,44 +399,44 @@ formEdad.onsubmit = (e) => {
     function carritoIndividual(div, arr, elId) {
       for (const obj in arr){
 
-       
 
-        if(elId === `syrah`) { 
-          return (valorSubTotalSyrah = ((productos[0].valor*arr.length)*1.21)) + 
+
+        if(elId === `syrah`) {
+          return (valorSubTotalSyrah = ((productos[0].valor*arr.length)*1.21)) +
           (div.innerHTML = `<p> PRODUCTO: ${productos[0].nombre}
           TIPO: ${productos[0].tipo}
           VALOR: $ ${productos[0].valor} + $ ${productos[0].valor*0.21}
-          CANTIDAD: ${arr.length} 
+          CANTIDAD: ${arr.length}
           SUB-TOTAL: $ ${valorSubTotalSyrah}</p>`) +
-          (borrarCarrito (divCarritoSyrah, `syrah`, carritoS)); 
+          (borrarCarrito (divCarritoSyrah, `syrah`, carritoS));
         } else if (elId === `vermouth`) {
-          return (valorSubTotalVermouth = ((productos[1].valor*arr.length)*1.21)) + 
+          return (valorSubTotalVermouth = ((productos[1].valor*arr.length)*1.21)) +
           (div.innerHTML = `<p> PRODUCTO: ${productos[1].nombre}
           TIPO: ${productos[1].tipo}
           VALOR: $ ${productos[1].valor} + $ ${productos[1].valor*0.21}
-          CANTIDAD: ${arr.length} 
+          CANTIDAD: ${arr.length}
           SUB-TOTAL: $ ${valorSubTotalVermouth}</p>`) +
           (borrarCarrito (divCarritoVermouth, `vermouth`, carritoV));
         } else if (elId === `bonarda`) {
-          return (valorSubTotalBonarda = ((productos[2].valor*arr.length)*1.21)) + 
+          return (valorSubTotalBonarda = ((productos[2].valor*arr.length)*1.21)) +
           (div.innerHTML = `<p> PRODUCTO: ${productos[2].nombre}
           TIPO: ${productos[2].tipo}
           VALOR: $ ${productos[2].valor} + $ ${productos[2].valor*0.21}
-          CANTIDAD: ${arr.length} 
-          SUB-TOTAL: $ ${valorSubTotalBonarda}</p>`) + 
+          CANTIDAD: ${arr.length}
+          SUB-TOTAL: $ ${valorSubTotalBonarda}</p>`) +
           (borrarCarrito (divCarritoBonarda, `bonarda`, carritoB));
         } else if (elId === `viognier`) {
-          return (valorSubTotalViognier = ((productos[3].valor*arr.length)*1.21)) + 
+          return (valorSubTotalViognier = ((productos[3].valor*arr.length)*1.21)) +
           (div.innerHTML = `<p> PRODUCTO: ${productos[3].nombre}
           TIPO: ${productos[3].tipo}
           VALOR: $ ${productos[3].valor} + $ ${productos[3].valor*0.21}
-          CANTIDAD: ${arr.length} 
-          SUB-TOTAL: $ ${valorSubTotalViognier}</p>`) + 
+          CANTIDAD: ${arr.length}
+          SUB-TOTAL: $ ${valorSubTotalViognier}</p>`) +
           (borrarCarrito (divCarritoViognier, `viognier`, carritoVg));
         }
       }
     }
-       
+
     if (carritoSyrah || carritoBonarda || carritoVermouth || carritoViognier) {
         carritoIndividual(divCarritoSyrah, carritoSyrah, `syrah`);
         carritoIndividual(divCarritoVermouth, carritoVermouth, `vermouth`);
